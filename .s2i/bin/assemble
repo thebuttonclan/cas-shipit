@@ -8,7 +8,7 @@ function rake_assets_precompile() {
   ! grep " rake " Gemfile.lock >/dev/null && return
   ! bundle exec 'rake -T' | grep "assets:precompile" >/dev/null && return
   export RAILS_ENV="${RAILS_ENV:-production}"
-  export DATABASE_URL="${DATABASE_URL:-sqlite3://memory}"
+  export DATABASE_URL="${DATABASE_URL:-postgres://null}"
 
   echo "---> Starting asset compilation ..."
   bundle exec rake assets:precompile
