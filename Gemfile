@@ -58,4 +58,3 @@ gem 'sidekiq'
 gem 'shipit-engine'
 gem 'redis-rails'
 gem 'kubernetes-deploy'
-gem 'whenever', require: false
