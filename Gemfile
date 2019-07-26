@@ -55,6 +55,6 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'sidekiq'
-gem 'shipit-engine'
+gem 'shipit-engine', github: 'bcgov/cas-shipit-engine'
 gem 'redis-rails'
 gem 'kubernetes-deploy'

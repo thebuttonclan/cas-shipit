@@ -1,3 +1,36 @@
+GIT
+  remote: https://github.com/bcgov/cas-shipit-engine.git
+  revision: 90f427078a7843ec8bec20c3f7544e258be1476e
+  specs:
+    shipit-engine (0.28.0)
+      active_model_serializers (~> 0.9.3)
+      ansi_stream (~> 0.0.6)
+      attr_encrypted (~> 3.1.0)
+      autoprefixer-rails (~> 6.4.1)
+      coffee-rails (~> 4.2)
+      explicit-parameters (~> 0.3.0)
+      faraday (~> 0.12.2)
+      faraday-http-cache (~> 1.2.2)
+      gemoji (~> 2.1)
+      jquery-rails (~> 4.1.0)
+      lodash-rails (~> 4.6.1)
+      octokit (~> 4.12.0)
+      omniauth-github (~> 1.3.0)
+      pubsubstub (~> 0.1.2)
+      rails (~> 5.2.1)
+      rails-timeago (~> 2.13.0)
+      rails_autolink (~> 1.1.6)
+      rake (~> 10.0)
+      redis-namespace (~> 1.5.2)
+      redis-objects (~> 1.2.1)
+      responders (~> 2.4.0)
+      safe_yaml (~> 1.0.4)
+      sass-rails (~> 5.0)
+      securecompare (~> 1.0.0)
+      sprockets-rails (>= 2.3.2)
+      state_machines-activerecord (~> 0.5.0)
+      validate_url (~> 1.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -300,34 +333,6 @@ GEM
     selenium-webdriver (3.142.3)
       childprocess (>= 0.5, < 2.0)
       rubyzip (~> 1.2, >= 1.2.2)
-    shipit-engine (0.27.1)
-      active_model_serializers (~> 0.9.3)
-      ansi_stream (~> 0.0.6)
-      attr_encrypted (~> 3.1.0)
-      autoprefixer-rails (~> 6.4.1)
-      coffee-rails (~> 4.2)
-      explicit-parameters (~> 0.3.0)
-      faraday (~> 0.12.2)
-      faraday-http-cache (~> 1.2.2)
-      gemoji (~> 2.1)
-      jquery-rails (~> 4.1.0)
-      lodash-rails (~> 4.6.1)
-      octokit (~> 4.12.0)
-      omniauth-github (~> 1.3.0)
-      pubsubstub (~> 0.1.2)
-      rails (~> 5.2.1)
-      rails-timeago (~> 2.13.0)
-      rails_autolink (~> 1.1.6)
-      rake (~> 10.0)
-      redis-namespace (~> 1.5.2)
-      redis-objects (~> 1.2.1)
-      responders (~> 2.4.0)
-      safe_yaml (~> 1.0.4)
-      sass-rails (~> 5.0)
-      securecompare (~> 1.0.0)
-      sprockets-rails (>= 2.3.2)
-      state_machines-activerecord (~> 0.5.0)
-      validate_url (~> 1.0.0)
     sidekiq (5.2.7)
       connection_pool (~> 2.2, >= 2.2.2)
       rack (>= 1.5.0)
@@ -405,7 +410,7 @@ DEPENDENCIES
   redis-rails
   sass-rails (~> 5.0)
   selenium-webdriver
-  shipit-engine
+  shipit-engine!
   sidekiq
   spring
   spring-watcher-listen (~> 2.0.0)
