@@ -29,6 +29,11 @@ OPENSHIFT_CLI_URL="https://github.com/openshift/origin/releases/download/v3.11.0
 mkdir -p /opt/app-root/bin
 curl -L $OPENSHIFT_CLI_URL | tar xz -C /opt/app-root/bin --strip-components 1
 
+echo "---> Installing jq..."
+JQ_BINARY_URL="https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64"
+curl -L $JQ_BINARY_URL --output /opt/app-root/bin/jq
+chmod +x /opt/app-root/bin/jq
+
 echo "---> Installing application source ..."
 mv /tmp/src/* ./
 
@@ -49,11 +54,11 @@ if [ -f Gemfile ]; then
   else
     BUNDLE_WITHOUT=${BUNDLE_WITHOUT:-"development:test"}
   fi
-  
+
   if [ -n "$BUNDLE_WITHOUT" ]; then
     ADDTL_BUNDLE_ARGS+=" --without $BUNDLE_WITHOUT"
   fi
-  
+
   echo "---> Running 'bundle install ${ADDTL_BUNDLE_ARGS}' ..."
   bundle install --path ./bundle ${ADDTL_BUNDLE_ARGS}
 
