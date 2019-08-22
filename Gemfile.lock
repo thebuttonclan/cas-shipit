@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/bcgov/cas-shipit-engine.git
-  revision: 5498d848a69d40a908a966529afa3855f5ac8977
+  revision: 9c9ccb82e00b125a191168c318a962a954feb07c
   specs:
     shipit-engine (0.28.0)
       active_model_serializers (~> 0.9.3)
