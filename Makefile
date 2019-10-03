@@ -15,6 +15,14 @@ lint: OC_PROJECT=$(OC_TOOLS_PROJECT)
 lint: whoami
 	$(call oc_lint)
 
+.PHONY: create_secrets
+create_secrets: OC_PROJECT=$(OC_TOOLS_PROJECT)
+create_secrets: POSTGRES_PASSWORD != openssl rand -base64 32 | tr -d /=+ | cut -c -16
+create_secrets: RAILS_MASTER_KEY != openssl rand -base64 64 | tr -d '/=+\n' | cut -c -32
+create_secrets: whoami
+	$(eval OC_TEMPLATE_VARS += POSTGRES_PASSWORD_BASE_64="$(shell echo -n "$(POSTGRES_PASSWORD)" | base64)" RAILS_MASTER_KEY="$(shell echo -n "$(RAILS_MASTER_KEY)" | base64)")
+	$(call oc_create_secrets)
+
 .PHONY: configure
 configure: $(call make_help,configure,Configures the tools project namespace for a build)
 configure: OC_PROJECT=$(OC_TOOLS_PROJECT)
@@ -33,13 +41,7 @@ build: whoami
 .PHONY: install
 install: OC_PROJECT=$(OC_TOOLS_PROJECT)
 install: whoami
-	$(eval POSTGRES_PASSWORD = $(shell if [ -n "$$($(OC) -n "$(OC_PROJECT)" get secret/$(PROJECT_PREFIX)shipit-postgres --ignore-not-found -o name)" ]; then \
-$(OC) -n "$(OC_PROJECT)" get secret/$(PROJECT_PREFIX)shipit-postgres -o go-template='{{index .data "database-password"}}' | base64 -d; else \
-openssl rand -base64 32 | tr -d /=+ | cut -c -16; fi))
-	$(eval RAILS_MASTER_KEY = $(shell if [ -n "$$($(OC) -n "$(OC_PROJECT)" get secret/$(PROJECT_PREFIX)shipit --ignore-not-found -o name)" ]; then \
-$(OC) -n "$(OC_PROJECT)" get secret/$(PROJECT_PREFIX)shipit -o go-template='{{index .data "RAILS_MASTER_KEY"}}' | base64 -d; else \
-openssl rand -base64 32 | tr -d /=+ | cut -c -16; fi))
-	$(eval OC_TEMPLATE_VARS += POSTGRES_PASSWORD="$(POSTGRES_PASSWORD)" POSTGRES_PASSWORD_BASE_64="$(shell echo -n "$(POSTGRES_PASSWORD)" | base64)" RAILS_MASTER_KEY="$(shell echo -n "$(RAILS_MASTER_KEY)" | base64)")
-	$(call oc_create_secrets)
+	$(eval POSTGRES_PASSWORD = $(shell $(OC) -n "$(OC_PROJECT)" get secret/$(PROJECT_PREFIX)shipit-postgres -o go-template='{{index .data "database-password"}}' | base64 -d))
+	$(eval OC_TEMPLATE_VARS += POSTGRES_PASSWORD="$(POSTGRES_PASSWORD)")
 	$(call oc_deploy)
 	$(call oc_wait_for_deploy_ready,$(PROJECT_PREFIX)shipit)
