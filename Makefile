@@ -30,3 +30,16 @@ build: OC_PROJECT=$(OC_TOOLS_PROJECT)
 build: whoami
 	$(call oc_build,$(PROJECT_PREFIX)shipit)
 
+.PHONY: install
+install: OC_PROJECT=$(OC_TOOLS_PROJECT)
+install: whoami
+	$(eval POSTGRES_PASSWORD = $(shell if [ -n "$$($(OC) -n "$(OC_PROJECT)" get secret/$(PROJECT_PREFIX)shipit-postgres --ignore-not-found -o name)" ]; then \
+$(OC) -n "$(OC_PROJECT)" get secret/$(PROJECT_PREFIX)shipit-postgres -o go-template='{{index .data "database-password"}}' | base64 -d; else \
+openssl rand -base64 32 | tr -d /=+ | cut -c -16; fi))
+	$(eval RAILS_MASTER_KEY = $(shell if [ -n "$$($(OC) -n "$(OC_PROJECT)" get secret/$(PROJECT_PREFIX)shipit --ignore-not-found -o name)" ]; then \
+$(OC) -n "$(OC_PROJECT)" get secret/$(PROJECT_PREFIX)shipit -o go-template='{{index .data "RAILS_MASTER_KEY"}}' | base64 -d; else \
+openssl rand -base64 32 | tr -d /=+ | cut -c -16; fi))
+	$(eval OC_TEMPLATE_VARS += POSTGRES_PASSWORD="$(POSTGRES_PASSWORD)" POSTGRES_PASSWORD_BASE_64="$(shell echo -n "$(POSTGRES_PASSWORD)" | base64)" RAILS_MASTER_KEY="$(shell echo -n "$(RAILS_MASTER_KEY)" | base64)")
+	$(call oc_create_secrets)
+	$(call oc_deploy)
+	$(call oc_wait_for_deploy_ready,$(PROJECT_PREFIX)shipit)

@@ -47,6 +47,12 @@ objects:
         type: Git
       strategy:
         sourceStrategy:
+          env:
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: RAILS_MASTER_KEY
+                  name: ${PREFIX}shipit
           from:
             kind: ImageStreamTag
             name: ${PREFIX}ruby:latest
