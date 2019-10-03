@@ -11,8 +11,7 @@ function rake_assets_precompile() {
   export DATABASE_URL="${DATABASE_URL:-postgres://null}"
 
   echo "---> Starting asset compilation ..."
-  # adding dummy RAILS_MASTER_KEY as a workaround for https://github.com/rails/rails/issues/32947
-  RAILS_MASTER_KEY=42 bundle exec rake assets:precompile
+  bundle exec rake assets:precompile
 }
 
 set -e
