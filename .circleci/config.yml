@@ -1,7 +1,9 @@
 version: 2.1
 
-jobs:
+orbs:
+  redhat-openshift: circleci/redhat-openshift@0.2.0
 
+jobs:
   bundle:
     docker:
       - image: circleci/ruby:2.5.3-node
@@ -40,7 +42,7 @@ jobs:
         environment:
           POSTGRES_USER: cas-shipit
           POSTGRES_DB: cas_shipit_test
-          POSTGRES_PASSWORD: ''
+          POSTGRES_PASSWORD: ""
     steps:
       - attach_workspace:
           at: ~/
@@ -83,6 +85,45 @@ jobs:
           name: Audit the bundle
           command: bundle audit check --update --ignore CVE-2015-9284
 
+  oc_lint:
+    executor: redhat-openshift/default
+    steps:
+      - checkout
+      - run:
+          name: "Pull Submodules"
+          command: |
+            git submodule init
+            git submodule update --remote
+      - redhat-openshift/login-and-update-kubeconfig:
+          insecure-skip-tls-verify: true
+          openshift-platform-version: 3.x
+          server-address: $OC_SERVER_ADDRESS
+          token: $OC_TOKEN
+      - run:
+          command: make lint
+          name: Lint the openshift yaml
+
+  oc_build:
+    executor: redhat-openshift/default
+    steps:
+      - checkout
+      - run:
+          name: "Pull Submodules"
+          command: |
+            git submodule init
+            git submodule update --remote
+      - redhat-openshift/login-and-update-kubeconfig:
+          insecure-skip-tls-verify: true
+          openshift-platform-version: 3.x
+          server-address: $OC_SERVER_ADDRESS
+          token: $OC_TOKEN
+      - run:
+          command: make configure
+          name: Configure imagestream to point at the current SHA1
+      - run:
+          command: make build
+          name: Build image on the remote cluster
+
 workflows:
   version: 2
   test:
@@ -94,3 +135,11 @@ workflows:
       - verify:
           requires:
             - bundle
+      - oc_lint:
+          context: cas-pipeline
+      - oc_build:
+          requires:
+            - test
+            - verify
+            - oc_lint
+          context: cas-pipeline
