@@ -135,11 +135,18 @@ workflows:
       - verify:
           requires:
             - bundle
+
       - oc_lint:
           context: cas-pipeline
-      - oc_build:
           requires:
             - test
             - verify
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+      - oc_build:
+          requires:
             - oc_lint
           context: cas-pipeline
