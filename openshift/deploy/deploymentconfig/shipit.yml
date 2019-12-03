@@ -98,6 +98,14 @@ objects:
               command:
                 - /usr/bin/env
               image: ${OC_REGISTRY}/${OC_PROJECT}/${PREFIX}shipit:${GIT_SHA1}
+              lifecycle:
+                preStop:
+                  exec:
+                    command:
+                      - /usr/bin/env
+                      - bash
+                      - "-c"
+                      - bundle exec sidekiqctl quiet
               <<: *envDefaults
               imagePullPolicy: IfNotPresent
               name: ${PREFIX}shipit-worker
@@ -108,18 +116,29 @@ objects:
                 requests:
                   cpu: 500m
                   memory: 256Mi
-              livenessProbe:
-                exec:
-                  command:
-                    - /usr/bin/env
-                    - bash
-                    - '-c'
-                    - '"ps ax | grep -v grep | grep sidekiq"'
+              ports:
+                - containerPort: 7433
+                  protocol: TCP
+              readinessProbe:
                 failureThreshold: 3
-                initialDelaySeconds: 120
+                httpGet:
+                  path: /
+                  port: 7433
+                  scheme: HTTP
+                initialDelaySeconds: 30
                 periodSeconds: 10
                 successThreshold: 1
                 timeoutSeconds: 1
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /
+                  port: 7433
+                  scheme: HTTP
+                initialDelaySeconds: 600
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 30
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
           dnsPolicy: ClusterFirst
