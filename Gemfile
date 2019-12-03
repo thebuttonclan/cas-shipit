@@ -58,5 +58,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'sidekiq'
 gem 'sidekiq_alive'
-gem 'shipit-engine', github: 'bcgov/cas-shipit-engine'
+gem 'shipit-engine'
 gem 'redis-rails'
