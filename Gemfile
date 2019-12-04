@@ -4,8 +4,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.5.3'
 gem 'bundler', '~> 1.16.1'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.0'
 # Use postgres as the database for Active Record
 gem 'pg'
 # Use Puma as the app server
@@ -17,8 +15,6 @@ gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
 
-# Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.2'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
@@ -58,5 +54,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'sidekiq'
 gem 'sidekiq_alive'
-gem 'shipit-engine'
+gem 'shipit-engine', '~> 0.29.0'
 gem 'redis-rails'
+
+# Rails 6 requires webpacker
+# see https://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-5-2-to-rails-6-0
+gem 'webpacker'
