@@ -10,12 +10,17 @@ parameters:
     displayName: Name of Ruby Image
     name: RUBY_IMAGE
     required: true
-    value: "registry.redhat.io/ubi8/ruby-25"
+    value: "registry.access.redhat.com/ubi8/ruby-26"
+  - description: Build of Ruby image to be used.
+    displayName: Build of Ruby Image
+    name: RUBY_BUILD
+    required: true
+    value: "1-13.1573664574"
   - description: Version of Ruby image to be used.
     displayName: Version of Ruby Image
     name: RUBY_VERSION
     required: true
-    value: "latest"
+    value: "2.6.3"
 
 objects:
   - apiVersion: image.openshift.io/v1
@@ -28,9 +33,5 @@ objects:
       tags:
         - from:
             kind: DockerImage
-            name: ${RUBY_IMAGE}:${RUBY_VERSION}
+            name: ${RUBY_IMAGE}:${RUBY_BUILD}
           name: ${RUBY_VERSION}
-        - from:
-            kind: DockerImage
-            name: ${RUBY_IMAGE}:${RUBY_VERSION}
-          name: latest

@@ -18,6 +18,11 @@ parameters:
     displayName: Use incremental build
     name: INCREMENTAL_BUILD
     required: true
+  - description: Version of Ruby image to be used.
+    displayName: Version of Ruby Image
+    name: RUBY_VERSION
+    required: true
+    value: "2.6.3"
 
 objects:
   - apiVersion: build.openshift.io/v1
@@ -55,7 +60,7 @@ objects:
                   name: ${PREFIX}shipit
           from:
             kind: ImageStreamTag
-            name: ${PREFIX}ruby:latest
+            name: ${PREFIX}ruby:${RUBY_VERSION}
           incremental: ${{INCREMENTAL_BUILD}}
         type: Source
       triggers: []
