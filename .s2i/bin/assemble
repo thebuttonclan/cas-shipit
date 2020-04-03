@@ -34,6 +34,10 @@ JQ_BINARY_URL="https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux6
 curl -L $JQ_BINARY_URL --output /opt/app-root/bin/jq
 chmod +x /opt/app-root/bin/jq
 
+echo "---> Installing helm..."
+HELM_BINARY_URL="https://get.helm.sh/helm-v3.1.2-linux-amd64.tar.gz"
+curl -L $HELM_BINARY_URL | tar xz -C /opt/app-root/bin --strip-components 1
+
 echo "---> Installing application source ..."
 mv /tmp/src/* ./
 
