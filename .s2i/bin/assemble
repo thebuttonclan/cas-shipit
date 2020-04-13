@@ -38,6 +38,12 @@ echo "---> Installing helm..."
 HELM_BINARY_URL="https://get.helm.sh/helm-v3.1.2-linux-amd64.tar.gz"
 curl -L $HELM_BINARY_URL | tar xz -C /opt/app-root/bin --strip-components 1
 
+echo "---> Installing terraform..."
+TERRAFORM_BINARY_URL="https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip"
+# use bsdtar (based on libarchive) to streaming unpack the zip file instead of gnu tar
+# since the zip manifest is located at the end of the archive and it doesn't rely on the manifest to unzip
+curl -L $TERRAFORM_BINARY_URL | bsdtar -xvf- -C /opt/app-root/bin/ --strip-components 1
+
 echo "---> Installing application source ..."
 mv /tmp/src/* ./
 
