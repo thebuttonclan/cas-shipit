@@ -19,7 +19,7 @@ objects:
           protocol: TCP
           targetPort: 8080
       selector:
-        name: ${PREFIX}shipit
+        name: ${PREFIX}shipit-web
       sessionAffinity: None
       type: ClusterIP
     status:
