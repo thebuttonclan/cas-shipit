@@ -68,7 +68,6 @@ objects:
                   exec:
                     command:
                       - /usr/bin/env
-                    args:
                       - bash
                       - "-c"
                       - bundle exec sidekiqctl quiet
