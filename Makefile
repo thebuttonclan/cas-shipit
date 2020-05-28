@@ -44,4 +44,5 @@ install: whoami
 	$(eval POSTGRES_PASSWORD = $(shell $(OC) -n "$(OC_PROJECT)" get secret/$(PROJECT_PREFIX)shipit-postgres -o go-template='{{index .data "database-password"}}' | base64 -d))
 	$(eval OC_TEMPLATE_VARS += POSTGRES_PASSWORD="$(POSTGRES_PASSWORD)")
 	$(call oc_deploy)
-	$(call oc_wait_for_deploy_ready,$(PROJECT_PREFIX)shipit)
+	$(call oc_wait_for_deploy_ready,$(PROJECT_PREFIX)shipit-web)
+	$(call oc_wait_for_deploy_ready,$(PROJECT_PREFIX)shipit-worker)
