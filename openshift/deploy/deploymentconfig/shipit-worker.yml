@@ -33,7 +33,7 @@ envDefaults: &envDefaults
       valueFrom:
         secretKeyRef:
           key: RAILS_MASTER_KEY
-          name: ${PREFIX}shipit-worker
+          name: ${PREFIX}shipit
     - name: RAILS_SERVE_STATIC_FILES
       value: "true"
 
