@@ -53,6 +53,10 @@ objects:
           labels:
             name: ${PREFIX}shipit-worker
         spec:
+          volumes:
+            - name: ${PREFIX}shipit-worker-data
+              persistentVolumeClaim:
+                claimName: ${PREFIX}shipit-worker-data
           restartPolicy: Always
           containers:
             - name: ${PREFIX}shipit-worker
