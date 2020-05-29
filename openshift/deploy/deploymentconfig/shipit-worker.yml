@@ -105,6 +105,9 @@ objects:
                 timeoutSeconds: 30
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /opt/app-root/src/data
+                  name: ${PREFIX}shipit-worker-data
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
