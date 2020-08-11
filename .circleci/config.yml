@@ -1,151 +1,31 @@
 version: 2.1
-
 orbs:
-  redhat-openshift: circleci/redhat-openshift@0.2.0
+  ruby: circleci/ruby@0.1.2 
 
 jobs:
-  bundle:
+  push-heroku:
     docker:
-      - image: circleci/ruby:2.5.3-node
-        environment:
-          BUNDLE_PATH: vendor/bundle
-          BUNDLE_FROZEN: true
-    steps:
-      - checkout
-      - restore_cache:
-          name: Restore Bundler Package Cache
-          keys:
-            - cas-shipit-bundle-v2-{{ checksum "Gemfile.lock" }}
-            - cas-shipit-bundle-v2-
-      - run:
-          name: Bundle install dependencies
-          command: bundle check || bundle install
-      - save_cache:
-          name: Save Bundler Package Cache
-          key: cas-shipit-bundle-v2-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - .
-
-  test:
-    docker:
-      - image: circleci/ruby:2.5.3-node
-        environment:
-          BUNDLE_PATH: vendor/bundle
-          BUNDLE_FROZEN: true
-          PGHOST: 127.0.0.1
-          PGUSER: cas-shipit
-      - image: circleci/postgres:11.4
-        environment:
-          POSTGRES_USER: cas-shipit
-          POSTGRES_DB: cas_shipit_test
-          POSTGRES_PASSWORD: ""
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Wait for DB
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run:
-          name: Setup the database
-          command: ./bin/rake db:setup
-      - run:
-          name: Run the tests
-          command: ./bin/rake test
-
-  verify:
-    docker:
-      - image: circleci/ruby:2.5.3-node
-        environment:
-          BUNDLE_PATH: vendor/bundle
-          BUNDLE_FROZEN: true
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Install the latest shipit-engine migrations
-          command: ./bin/rake shipit:install:migrations
-      - run:
-          name: Verify no upstream migrations have been missed
-          command: git diff --quiet
-
-  audit:
-    docker:
-      - image: circleci/ruby:2.5.3-node
-        environment:
-          BUNDLE_PATH: vendor/bundle
-          BUNDLE_FROZEN: true
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Audit the bundle
-          command: bundle audit check --update --ignore CVE-2015-9284
-
-  oc_lint:
-    executor: redhat-openshift/default
+      - image: circleci/ruby:2.6.3-stretch-node
+    executor: ruby/default
     steps:
       - checkout
       - run:
-          name: "Pull Submodules"
-          command: |
-            git submodule init
-            git submodule update --remote
-      - redhat-openshift/login-and-update-kubeconfig:
-          insecure-skip-tls-verify: true
-          openshift-platform-version: 3.x
-          server-address: $OC_SERVER_ADDRESS
-          token: $OC_TOKEN
-      - run:
-          command: make lint
-          name: Lint the openshift yaml
-
-  oc_build:
-    executor: redhat-openshift/default
-    steps:
-      - checkout
-      - run:
-          name: "Pull Submodules"
-          command: |
-            git submodule init
-            git submodule update --remote
-      - redhat-openshift/login-and-update-kubeconfig:
-          insecure-skip-tls-verify: true
-          openshift-platform-version: 3.x
-          server-address: $OC_SERVER_ADDRESS
-          token: $OC_TOKEN
-      - run:
-          command: make configure
-          name: Configure imagestream to point at the current SHA1
-      - run:
-          command: make build
-          name: Build image on the remote cluster
+        name: Publish to Heroku Server
+        command: |
+          rm -rf .git
+          git init
+          git config user.email "$USER_EMAIL"
+          git config user.name "$USER_NAME"
+          git add .
+          git commit -m "CircleCI Pipeline"
+          git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git master
 
 workflows:
   version: 2
-  test:
+  pipeline:
     jobs:
-      - bundle
-      - test:
-          requires:
-            - bundle
-      - verify:
-          requires:
-            - bundle
-      - oc_lint:
-          context: cas-pipeline
-          requires:
-            - test
-            - verify
-      - oc_build:
-          requires:
-            - oc_lint
-          context: cas-pipeline
+      - push-heroku:
           filters:
             branches:
               only:
-                - master
                 - develop
