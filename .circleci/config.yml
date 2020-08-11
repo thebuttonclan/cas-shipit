@@ -10,15 +10,15 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Publish to Heroku Server
-        command: |
-          rm -rf .git
-          git init
-          git config user.email "$USER_EMAIL"
-          git config user.name "$USER_NAME"
-          git add .
-          git commit -m "CircleCI Pipeline"
-          git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git master
+          name: Publish to Heroku Server
+          command: |
+            rm -rf .git
+            git init
+            git config user.email "$USER_EMAIL"
+            git config user.name "$USER_NAME"
+            git add .
+            git commit -m "CircleCI Pipeline"
+            git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git master
 
 workflows:
   version: 2
