@@ -345,7 +345,6 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap (>= 1.1.0)
-  bundler (~> 1.16.1)
   bundler-audit
   byebug
   capybara (>= 2.15, < 4.0)
@@ -369,7 +368,7 @@ DEPENDENCIES
   web-console (>= 3.3.0)
 
 RUBY VERSION
-   ruby 2.5.3p105
+   ruby 2.6.4p104
 
 BUNDLED WITH
-   1.16.1
+   2.1.4
