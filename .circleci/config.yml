@@ -13,8 +13,6 @@ jobs:
           name: Publish to Heroku Server
           command: |
             rm -rf .git
-            rm .gitignore
-            mv config/secrets.example.yml config/secrets.yml
             git init
             git config user.email "$USER_EMAIL"
             git config user.name "$USER_NAME"
