@@ -1,6 +1,6 @@
-:concurrency: 1
+:concurrency: 2
 production:
-  :concurrency: 2
+  :concurrency: 3
 :queues:
   - default
   - deploys
