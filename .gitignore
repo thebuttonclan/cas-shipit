@@ -26,3 +26,7 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 config/secrets.yml
+
+# Ignore credentials file for local development.
+# credentials-prod.yml.enc will be renamed in production
+credentials.yml.enc
