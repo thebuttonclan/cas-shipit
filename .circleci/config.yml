@@ -13,6 +13,7 @@ jobs:
           name: Publish to Heroku Server
           command: |
             rm -rf .git
+            rm .gitignore
             rm config/credentials.yml.enc
             mv config/credentials-prod.yml.enc config/credentials.yml.enc
             git init
