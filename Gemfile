@@ -64,3 +64,5 @@ gem 'sidekiq'
 gem 'sidekiq_alive'
 gem 'shipit-engine'
 gem 'redis-rails'
+
+gem "rubocop", "~> 0.84.0"
