@@ -14,7 +14,7 @@ jobs:
           command: |
             rm -rf .git
             rm .gitignore
-            rm config/credentials.yml.enc
+            rm -f config/credentials.yml.enc
             mv config/credentials-prod.yml.enc config/credentials.yml.enc
             git init
             git config user.email "$USER_EMAIL"
