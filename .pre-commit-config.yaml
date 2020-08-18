@@ -2,8 +2,7 @@
     rev: v3.2.0  # Use the ref you want to point at
     hooks:
     -   id: check-yaml
-    # -   id: ...
-# -   repo: https://github.com/mattlqx/pre-commit-ruby
-#     rev: v1.3.3
-#     hooks:
-#     -   id: rubocop
+-   repo: https://github.com/mattlqx/pre-commit-ruby
+    rev: v1.3.3
+    hooks:
+    -   id: rubocop
