@@ -56,7 +56,7 @@ jobs:
             command: |
               source ~/.asdf/asdf.sh 
               asdf reshim 
-              pre-commit install
+              cat .tool-versions
               pre-commit run --all-files
   push-heroku:
     docker:
