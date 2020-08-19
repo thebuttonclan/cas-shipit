@@ -62,14 +62,14 @@ jobs:
               source ~/.asdf/asdf.sh 
               asdf global postgres 11.4
               asdf reshim 
-              bundle install --path vendor/bundle
+              bundle install
               gem environment
               pre-commit
         - save_cache:
             name: Save gems
             key: gem-cache-{{ checksum "Gemfile.lock" }}
             paths:
-              - vendor/bundle
+              - /home/circleci/.asdf/installs/ruby/2.6.4/lib/ruby/gems/2.6.0
   push-heroku:
     docker:
       - image: circleci/ruby:2.6.3-stretch-node
