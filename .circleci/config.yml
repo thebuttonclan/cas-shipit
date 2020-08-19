@@ -33,7 +33,6 @@ jobs:
               asdf plugin-add yarn
               asdf install
               asdf reshim
-              gem install bundler:2.1.4
         - save_cache:
             name: Save asdf Tools Cache
             key: tool-versions-{{ checksum ".tool-versions" }}-v2
@@ -53,6 +52,7 @@ jobs:
         - run:
             name: pre-commit
             command: |
+              source ~/.asdf/asdf.sh
               pip install pre-commit  
               asdf reshim
               pre-commit install
