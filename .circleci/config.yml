@@ -30,6 +30,11 @@ jobs:
               asdf install
               asdf reshim
               gem install bundler:2.1.4
+        - persist_to_workspace:
+            root: ~/
+            paths:
+              - .asdf
+              - .bashrc
   lint:
     docker:  
         - image: cimg/base:2020.01
