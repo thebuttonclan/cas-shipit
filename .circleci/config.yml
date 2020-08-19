@@ -27,7 +27,6 @@ jobs:
             name: Install asdf tools
             command: |
               asdf install
-              asdf global postgres 11.4
               asdf reshim
               pip install pre-commit
         - save_cache:
@@ -60,6 +59,7 @@ jobs:
             name: pre-commit
             command: |
               source ~/.asdf/asdf.sh 
+              asdf global postgres 11.4
               asdf reshim 
               bundle install
               pre-commit run --all-files
@@ -67,7 +67,7 @@ jobs:
         #     name: Save asdf Tools Cache
         #     key: gem-cache-{{ checksum "Gemfile.lock" }}-v2
         #     paths:
-        #       - gems
+        #       - vendor/bundle
   push-heroku:
     docker:
       - image: circleci/ruby:2.6.3-stretch-node
