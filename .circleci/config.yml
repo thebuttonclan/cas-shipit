@@ -43,8 +43,8 @@ jobs:
   lint:
     docker:  
         - image: cimg/base:2020.01
-    working_directory: ~/cas-shipit
     steps:
+        - checkout
         - attach_workspace:
             at: ~/
         - run:
@@ -62,13 +62,13 @@ jobs:
               source ~/.asdf/asdf.sh 
               asdf global postgres 11.4
               asdf reshim 
-              bundle install
+              bundle install --path vendor/bundle
               pre-commit
         - save_cache:
-            name: Save asdf Tools Cache
+            name: Save gems
             key: gem-cache-{{ checksum "Gemfile.lock" }}
             paths:
-              - ~/cas-shipit/vendor/bundle
+              - vendor/bundle
   push-heroku:
     docker:
       - image: circleci/ruby:2.6.3-stretch-node
