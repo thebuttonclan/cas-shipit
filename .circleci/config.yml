@@ -9,16 +9,20 @@ jobs:
       steps:
         - checkout
         - run:
+            name: Install python dependencies
+            command: |
+              sudo apt update
+              sudo apt-get update; sudo apt-get -y install --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+        - restore_cache:
+            name: Restore asdf Tools Cache
+            keys:
+              - tool-versions-{{ checksum ".tool-versions" }}-v2
+        - run:
             name: Install asdf
             command: |
               [ ! -f ".tool-versions" ] && echo "file .tool-versions was not found" && exit 1
               [ -d ~/.asdf-vm ] || git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.7.4
               echo 'source ~/.asdf/asdf.sh' >> $BASH_ENV
-        - run:
-            name: Install python dependencies
-            command: |
-              sudo apt update
-              sudo apt-get update; sudo apt-get -y install --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
         - run:
             name: Install asdf tools
             command: |
@@ -30,6 +34,11 @@ jobs:
               asdf install
               asdf reshim
               gem install bundler:2.1.4
+        - save_cache:
+            name: Save asdf Tools Cache
+            key: tool-versions-{{ checksum ".tool-versions" }}-v2
+            paths:
+              - ~/.asdf
         - persist_to_workspace:
             root: ~/
             paths:
@@ -39,7 +48,8 @@ jobs:
     docker:  
         - image: cimg/base:2020.01
     steps:
-        - checkout
+        - attach_workspace:
+            at: ~/
         - run:
             name: pre-commit
             command: |
