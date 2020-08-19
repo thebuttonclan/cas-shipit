@@ -48,7 +48,7 @@ jobs:
         - attach_workspace:
             at: ~/
         - run:
-            name: install dependencies
+            name: Install dependencies
             command: |
               sudo apt-get update
               sudo apt-get -y install zlib1g-dev libpq-dev
@@ -57,7 +57,7 @@ jobs:
             keys:
               - gem-cache-v2-{{ checksum "Gemfile.lock" }}
         - run:
-            name: pre-commit
+            name: Run pre-commit
             command: |
               source ~/.asdf/asdf.sh 
               asdf global postgres 11.4
@@ -68,7 +68,7 @@ jobs:
             name: Save gems
             key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
             paths:
-              - /home/circleci/.asdf/installs/ruby/2.6.4/lib/ruby/gems/2.6.0
+              - gem environment gemdir
   push-heroku:
     docker:
       - image: circleci/ruby:2.6.3-stretch-node
@@ -98,6 +98,8 @@ workflows:
           requires:
             - tools
       - push-heroku:
+          requires:
+            - lint
           filters:
             branches:
               only:
