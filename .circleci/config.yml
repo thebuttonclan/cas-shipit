@@ -62,7 +62,7 @@ jobs:
               asdf global postgres 11.4
               asdf reshim 
               bundle install
-              pre-commit run --all-files
+              pre-commit
         - save_cache:
             name: Save asdf Tools Cache
             key: gem-cache-{{ checksum "Gemfile.lock" }}
