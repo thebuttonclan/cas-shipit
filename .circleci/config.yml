@@ -55,7 +55,7 @@ jobs:
         - restore_cache:
             name: Restore gems
             keys:
-              - gem-cache-{{ checksum "Gemfile.lock" }}
+              - gem-cache-v2-{{ checksum "Gemfile.lock" }}
         - run:
             name: pre-commit
             command: |
@@ -67,7 +67,7 @@ jobs:
               pre-commit
         - save_cache:
             name: Save gems
-            key: gem-cache-{{ checksum "Gemfile.lock" }}
+            key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
             paths:
               - /home/circleci/.asdf/installs/ruby/2.6.4/lib/ruby/gems/2.6.0
   push-heroku:
