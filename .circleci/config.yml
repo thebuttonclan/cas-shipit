@@ -27,6 +27,8 @@ jobs:
             name: Install asdf tools
             command: |
               asdf install
+              asdf reshim
+              pip install pre-commit
         - save_cache:
             name: Save asdf Tools Cache
             key: tool-versions-{{ checksum ".tool-versions" }}-v2
@@ -46,9 +48,7 @@ jobs:
         - run:
             name: pre-commit
             command: |
-              source ~/.asdf/asdf.sh
-              asdf reshim
-              pip install pre-commit  
+              source ~/.asdf/asdf.sh  
               pre-commit install
               pre-commit run --all-files
   push-heroku:
