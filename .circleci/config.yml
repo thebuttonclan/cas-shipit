@@ -50,7 +50,11 @@ jobs:
             name: install dependencies
             command: |
               sudo apt-get update
-              sudo apt-get -y install zlib1g-dev
+              sudo apt-get -y install zlib1g-dev libpq-dev
+        - restore_cache:
+            name: Restore gems
+            keys:
+              - gem-cache-{{ checksum "Gemfile.lock" }}
         - run:
             name: pre-commit
             command: |
@@ -58,6 +62,9 @@ jobs:
               asdf reshim 
               bundle install
               pre-commit run --all-files
+        - save_cache:
+            name: Save asdf Tools Cache
+            key: gem-cache-{{ checksum "Gemfile.lock" }}-v2
   push-heroku:
     docker:
       - image: circleci/ruby:2.6.3-stretch-node
