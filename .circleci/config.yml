@@ -39,11 +39,12 @@ jobs:
             paths:
               - .asdf
               - .bashrc
+              - cas-shipit
   lint:
     docker:  
         - image: cimg/base:2020.01
+    working_directory: ~/cas-shipit
     steps:
-        - checkout
         - attach_workspace:
             at: ~/
         - run:
@@ -67,7 +68,7 @@ jobs:
             name: Save asdf Tools Cache
             key: gem-cache-{{ checksum "Gemfile.lock" }}
             paths:
-              - ./vendor/cache
+              - ~/cas-shipit/vendor/bundle
   push-heroku:
     docker:
       - image: circleci/ruby:2.6.3-stretch-node
