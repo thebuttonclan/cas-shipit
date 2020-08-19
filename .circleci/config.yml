@@ -27,6 +27,7 @@ jobs:
             name: Install asdf tools
             command: |
               asdf install
+              asdf global postgres 11.4
               asdf reshim
               pip install pre-commit
         - save_cache:
