@@ -26,11 +26,6 @@ jobs:
         - run:
             name: Install asdf tools
             command: |
-              asdf plugin-add python
-              asdf plugin-add ruby
-              asdf plugin-add postgres
-              asdf plugin-add redis
-              asdf plugin-add yarn
               asdf install
               asdf reshim
         - save_cache:
