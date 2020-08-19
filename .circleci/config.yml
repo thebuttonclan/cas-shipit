@@ -11,8 +11,8 @@ jobs:
         - run:
             name: Install python dependencies
             command: |
-              sudo apt update
-              sudo apt-get update; sudo apt-get -y install --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+              sudo apt-get update
+              sudo apt-get -y install --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
         - restore_cache:
             name: Restore asdf Tools Cache
             keys:
@@ -46,6 +46,11 @@ jobs:
         - checkout
         - attach_workspace:
             at: ~/
+        - run:
+            name: install dependencies
+            command: |
+              sudo apt-get update
+              sudo apt-get -y install zlib1g-dev
         - run:
             name: pre-commit
             command: |
