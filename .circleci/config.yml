@@ -62,7 +62,7 @@ jobs:
               source ~/.asdf/asdf.sh 
               asdf global postgres 11.4
               asdf reshim 
-              bundle check --path /home/circleci/project/vendor/bundle || bundle install
+              bundle install --path vendor/bundle
               pre-commit
         - save_cache:
             name: Save gems
