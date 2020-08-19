@@ -67,7 +67,7 @@ jobs:
             name: Save asdf Tools Cache
             key: gem-cache-{{ checksum "Gemfile.lock" }}
             paths:
-              - vendor/bundle
+              - ./vendor/cache
   push-heroku:
     docker:
       - image: circleci/ruby:2.6.3-stretch-node
