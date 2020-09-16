@@ -1,0 +1,43 @@
+version: '3'
+services:
+  postgres:
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    image: postgres:11-alpine
+    ports:
+      - 5432
+    volumes:
+      - .compose-data/postgresql:/var/lib/postgresql/data/pgdata
+  redis:
+    command: redis-server --appendonly yes
+    image: redis:5-alpine
+    ports:
+      - 6379
+    volumes:
+      - .compose-data/redis:/data
+  app:
+    build: .
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/cas_shipit_development
+      - RAILS_ENV=development
+      - REDIS_URL=redis://redis:6379
+      - RAILS_MASTER_KEY
+    restart: on-failure
+    ports:
+      - 3000:3000
+  worker:
+    build: .
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432
+      - REDIS_URL=redis://redis:6379
+      - RAILS_MASTER_KEY
+    restart: on-failure
+    command: bundle exec sidekiq -C config/sidekiq.yml

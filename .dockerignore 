@@ -7,6 +7,30 @@
 # Ignore bundler config.
 /.bundle
 
+.git
+.gitignore
+README.md
+
+.env
+.env.sample
+*.rbc
+capybara-*.html
+log
+tmp
+db/*.sqlite3
+db/*.sqlite3-journal
+public/system
+coverage/
+spec/tmp
+**.orig
+
+.bundle
+
+.ruby-version
+.ruby-gemset
+
+.rvmrc
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -33,6 +57,3 @@ credentials.yml.enc
 
 # Shipit store cloned repos under directory `data`
 data
-
-/.compose-data
-ngrok
