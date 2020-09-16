@@ -63,7 +63,10 @@ jobs:
               source ~/.asdf/asdf.sh 
               asdf global postgres 11.4
               asdf reshim 
+              echo PRE_BUNDLE
+              gem install bundler:2.1.4
               bundle install
+              echo POST_BUNDLE
               pre-commit
         - save_cache:
             name: Save gems
