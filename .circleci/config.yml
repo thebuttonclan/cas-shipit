@@ -94,6 +94,10 @@ workflows:
   version: 2
   pipeline:
     jobs:
+      - tools
+      - lint:
+          requires:
+            - tools
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
           aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
@@ -107,11 +111,9 @@ workflows:
           region: AWS_REGION_ENV_VAR_NAME
           repo: shipit-images
           skip-when-tags-exist: false
-          tag: 'latest,myECRRepoTag'
-      - tools
-      - lint:
+          tag: '1.0.0'
           requires:
-            - tools
+            - lint
       # - push-heroku:
       #     requires:
       #       - lint
