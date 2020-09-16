@@ -13,7 +13,6 @@ RUN apk add --no-cache --update \
 
 ENV CI=true
 ENV SHIPIT_VERSION=v0.28.1
-ENV DATABASE_URL=postgres://localhost
 
 RUN gem install rails -v 5.2 --no-document
 
