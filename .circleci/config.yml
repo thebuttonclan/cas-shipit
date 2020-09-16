@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   ruby: circleci/ruby@0.1.2 
+  aws-ecr: circleci/aws-ecr@6.12.2
 
 jobs:
   tools:
@@ -88,19 +89,35 @@ jobs:
             git add .
             git commit -m "CircleCI Pipeline"
             git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git master
+  publish-ecr:
+
 
 workflows:
   version: 2
   pipeline:
     jobs:
+      - aws-ecr/build-and-push-image:
+        account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
+        aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
+        aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+        # context: myContext
+        create-repo: false
+        # dockerfile: myDockerfile
+        no-output-timeout: 20m
+        # path: pathToMyDockerfile
+        # profile-name: myProfileName
+        region: AWS_REGION_ENV_VAR_NAME
+        repo: shipit-images
+        skip-when-tags-exist: false
+        tag: 'latest,myECRRepoTag'
       - tools
       - lint:
           requires:
             - tools
-      - push-heroku:
-          requires:
-            - lint
-          filters:
-            branches:
-              only:
-                - develop
+      # - push-heroku:
+      #     requires:
+      #       - lint
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
