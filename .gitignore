@@ -29,10 +29,12 @@ config/secrets.yml
 
 # Ignore credentials file for local development.
 # credentials-prod.yml.enc will be renamed in production
-credentials.yml.enc
+# credentials.yml.enc
 
 # Shipit store cloned repos under directory `data`
 data
 
 /.compose-data
 ngrok
+
+shipit-helm

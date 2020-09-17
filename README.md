@@ -27,3 +27,23 @@ Before triggering the first build, you need to run `make create_secrets`, as the
 
   - Run `RAILS_MASTER_KEY=<master key> docker-compose up`
   - If this is your first time starting the server, initialize the database with `docker-compose run app bundle exec rake db:create`
+
+Node needs the following permissions for ECR
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:BatchGetImage",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:GetAuthorizationToken"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
