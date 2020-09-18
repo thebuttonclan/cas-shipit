@@ -30,8 +30,6 @@ jobs:
         - run:
             name: Install asdf tools
             command: |
-              asdf plugin-add helm
-              asdf plugin-add python
               asdf install
               asdf reshim
               pip install pre-commit
