@@ -99,6 +99,8 @@ jobs:
     executor: aws-cli/default
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - aws-cli/setup:
           aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
           aws-region: AWS_REGION
@@ -115,8 +117,10 @@ workflows:
   version: 2
   pipeline:
     jobs:
-      - aws-cli-example
-      # - tools
+      - aws-cli-example:
+          requires:
+            - tools
+      - tools
       # - lint:
       #     requires:
       #       - tools
