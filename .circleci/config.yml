@@ -103,16 +103,22 @@ jobs:
           aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
           aws-region: AWS_REGION
           aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - .aws      
+  helm-example:
+    executor: aws-cli/python3
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
       - aws-eks/install-helm-chart:
           chart: ./shipit-helm
           cluster-name: aardvark-orange
           values-to-override: "image_tag=1.0.0"
           aws-profile: example
-          # requires:
-            # - lint
-            # - aws-ecr/build-and-push-image
-            # - aws-cli-example
-      - run: echo "Didn't fail!"
+      
   
 workflows:
   version: 2
@@ -139,15 +145,15 @@ workflows:
       #     tag: '1.0.0'
       #     requires:
       #       - lint
-      # - aws-eks/install-helm-chart:
-      #     chart: ./shipit-helm
-      #     cluster-name: aardvark-orange
-      #     values-to-override: "image_tag=1.0.0"
-      #     aws-profile: example
-      #     requires:
-      #       - lint
-      #       - aws-ecr/build-and-push-image
-      #       - aws-cli-example
+      - aws-eks/install-helm-chart:
+          chart: ./shipit-helm
+          cluster-name: aardvark-orange
+          values-to-override: "image_tag=1.0.0"
+          aws-profile: example
+          requires:
+            # - lint
+            # - aws-ecr/build-and-push-image
+            - aws-cli-example
       # - push-heroku:
       #     requires:
       #       - lint
