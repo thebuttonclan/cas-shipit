@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+  labels:
+    io.kompose.service: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      io.kompose.service: redis
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: "1.21.0 (992df58d8)"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:5-alpine
+        ports:
+        - containerPort: 6379
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   annotations:
+#     kompose.cmd: kompose convert
+#     kompose.version: "1.21.0 (992df58d8)"
+#   creationTimestamp: null
+#   labels:
+#     io.kompose.service: redis
+#   name: redis
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       io.kompose.service: redis
+#   strategy:
+#     type: Recreate
+#   template:
+#     metadata:
+#       annotations:
+#         kompose.cmd: kompose convert
+#         kompose.version: "1.21.0 (992df58d8)"
+#       creationTimestamp: null
+#       labels:
+#         io.kompose.service: redis
+#     spec:
+#       containers:
+#       - args:
+#         - redis-server
+#         - --appendonly
+#         - yes
+#         image: "redis:5-alpine"
+#         name: redis
+#         ports:
+#         - containerPort: 6379
+#         resources: {}
+#         volumeMounts:
+#         - mountPath: /data
+#           name: redis-claim0
+#       restartPolicy: Always
+#       serviceAccountName: ""
+#       volumes:
+#       - name: redis-claim0
+#         persistentVolumeClaim:
+#           claimName: redis-claim0
+# status: {}
