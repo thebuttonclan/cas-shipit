@@ -106,7 +106,8 @@ jobs:
       - run:
           name: Do stuff
           command: |
-            aws --version
+            aws eks --region $AWS_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
+            kubectl get svc
       
   
 workflows:
