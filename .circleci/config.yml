@@ -110,7 +110,7 @@ jobs:
             source ~/.asdf/asdf.sh
             asdf reshim
             aws eks --region $AWS_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
-            helm upgrade shipit ./shipit-helm -n test --set master_key=$RAILS_MASTER_KEY --set image_tag=1.0.0
+            helm upgrade --install shipit ./shipit-helm -n test --set master_key=$RAILS_MASTER_KEY --set image_tag=1.0.0
       
 workflows:
   version: 2
