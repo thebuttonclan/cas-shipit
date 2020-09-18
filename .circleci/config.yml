@@ -120,7 +120,7 @@ workflows:
             - lint
       - aws-eks/install-helm-chart:
           chart: ./shipit-helm
-          aws-region: AWS_REGION
+          aws-region: $AWS_REGION
           cluster-name: aardvark-orange
           values-to-override: "image_tag=1.0.0"
           requires:
