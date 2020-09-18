@@ -4,6 +4,7 @@ orbs:
   aws-ecr: circleci/aws-ecr@6.12.2
   aws-eks: circleci/aws-eks@1.0.0
   aws-cli: circleci/aws-cli@1.3.0
+  kube-orb: circleci/kubernetes@0.11.1
 
 jobs:
   tools:
@@ -102,6 +103,7 @@ jobs:
           aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
           aws-region: AWS_REGION
           aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+      - kube-orb/install-kubectl
       - run:
           name: Do stuff
           command: |
