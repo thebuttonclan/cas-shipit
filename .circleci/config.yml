@@ -93,7 +93,7 @@ jobs:
             git add .
             git commit -m "CircleCI Pipeline"
             git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git master
-  aws-cli-example:
+  update-helm-chart:
     executor: aws-cli/default
     steps:
       - checkout
@@ -105,40 +105,41 @@ jobs:
           aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
       - kube-orb/install-kubectl
       - run:
-          name: Do stuff
+          name: Update helm chart
           command: |
             source ~/.asdf/asdf.sh
             asdf reshim
             aws eks --region $AWS_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
-            helm upgrade --install shipit ./shipit-helm -n test --set master_key=$RAILS_MASTER_KEY --set image_tag=1.0.0
+            helm upgrade --install shipit ./shipit-helm -n test --set master_key=$RAILS_MASTER_KEY --set image_tag=$(echo $CIRCLE_SHA1 | cut -c -7)
       
 workflows:
   version: 2
   pipeline:
     jobs:
-      - aws-cli-example:
+      - update-helm-chart:
           requires:
             - tools
+            - aws-ecr/build-and-push-image
       - tools
       # - lint:
       #     requires:
       #       - tools
-      # - aws-ecr/build-and-push-image:
-      #     account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
-      #     aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-      #     aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-      #     # context: myContext
-      #     create-repo: false
-      #     # dockerfile: myDockerfile
-      #     no-output-timeout: 20m
-      #     # path: pathToMyDockerfile
-      #     # profile-name: myProfileName
-      #     region: AWS_REGION_ENV_VAR_NAME
-      #     repo: shipit-images
-      #     skip-when-tags-exist: false
-      #     tag: '1.0.0'
-      #     requires:
-      #       - lint
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
+          aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
+          aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+          # context: myContext
+          create-repo: false
+          # dockerfile: myDockerfile
+          no-output-timeout: 20m
+          # path: pathToMyDockerfile
+          # profile-name: myProfileName
+          region: AWS_REGION_ENV_VAR_NAME
+          repo: shipit-images
+          skip-when-tags-exist: true
+          tag: $(echo $CIRCLE_SHA1 | cut -c -7)
+          # requires:
+          #   - lint
       # - push-heroku:
       #     requires:
       #       - lint

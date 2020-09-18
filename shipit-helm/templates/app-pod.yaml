@@ -19,8 +19,10 @@ spec:
         secretKeyRef:
           key: master_key
           name: {{ .Release.Name }}-auth
-    image: "491327797652.dkr.ecr.ca-central-1.amazonaws.com/shipit-images:{{ .Values.image_tag }}"
-    imagePullPolicy: Always
+    # image: "491327797652.dkr.ecr.ca-central-1.amazonaws.com/shipit-images:{{ .Values.image_tag }}"
+    image: shipit
+    # imagePullPolicy: Always
+    imagePullPolicy: Never
     name: app
     ports:
     - containerPort: 3000
