@@ -111,6 +111,8 @@ jobs:
       - run:
           name: Do stuff
           command: |
+            source ~/.asdf/asdf.sh
+            asdf reshim
             aws eks --region $AWS_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
             helm version
       
