@@ -66,10 +66,8 @@ jobs:
               source ~/.asdf/asdf.sh 
               asdf global postgres 11.4
               asdf reshim 
-              echo PRE_BUNDLE
               gem install bundler:2.1.4
               bundle install
-              echo POST_BUNDLE
               pre-commit
         - save_cache:
             name: Save gems
@@ -112,9 +110,8 @@ jobs:
             source ~/.asdf/asdf.sh
             asdf reshim
             aws eks --region $AWS_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
-            helm version
+            helm upgrade shipit ./shipit-helm -n test --set master_key=$RAILS_MASTER_KEY --set image_tag=1.0.0
       
-  
 workflows:
   version: 2
   pipeline:
@@ -142,15 +139,6 @@ workflows:
       #     tag: '1.0.0'
       #     requires:
       #       - lint
-      # - aws-eks/install-helm-chart:
-      #     chart: ./shipit-helm
-      #     cluster-name: aardvark-orange
-      #     values-to-override: "image_tag=1.0.0"
-      #     aws-profile: example
-      #     requires:
-      #       # - lint
-      #       # - aws-ecr/build-and-push-image
-      #       - aws-cli-example
       # - push-heroku:
       #     requires:
       #       - lint
