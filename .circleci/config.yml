@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@0.1.2 
   aws-ecr: circleci/aws-ecr@6.12.2
+  aws-eks: circleci/aws-eks@1.0.0
 
 jobs:
   tools:
@@ -117,6 +118,13 @@ workflows:
           tag: '1.0.0'
           requires:
             - lint
+      - aws-eks/install-helm-chart:
+          chart: ./shipit-helm
+          cluster-name: aardvark-orange
+          values-to-override: "image_tag=1.0.0"
+          requires:
+            - lint
+            - aws-ecr/build-and-push-image
       # - push-heroku:
       #     requires:
       #       - lint
