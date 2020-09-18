@@ -108,7 +108,7 @@ jobs:
           name: Do stuff
           command: |
             aws eks --region $AWS_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
-            kubectl get svc
+            helm version
       
   
 workflows:
