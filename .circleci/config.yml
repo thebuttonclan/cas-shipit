@@ -109,7 +109,7 @@ workflows:
   version: 2
   pipeline:
     jobs:
-        - aws-cli-example
+      - aws-cli-example
       # - tools
       # - lint:
       #     requires:
@@ -130,14 +130,15 @@ workflows:
       #     tag: '1.0.0'
       #     requires:
       #       - lint
-      # - aws-eks/install-helm-chart:
-      #     chart: ./shipit-helm
-      #     aws-region: $AWS_REGION
-      #     cluster-name: aardvark-orange
-      #     values-to-override: "image_tag=1.0.0"
-      #     requires:
-      #       - lint
-      #       - aws-ecr/build-and-push-image
+      - aws-eks/install-helm-chart:
+          chart: ./shipit-helm
+          cluster-name: aardvark-orange
+          values-to-override: "image_tag=1.0.0"
+          aws-profile: example
+          requires:
+            # - lint
+            # - aws-ecr/build-and-push-image
+            - aws-cli-example
       # - push-heroku:
       #     requires:
       #       - lint
