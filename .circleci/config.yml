@@ -31,7 +31,6 @@ jobs:
             command: |
               asdf plugin-add postgres
               asdf plugin-add ruby
-              asdf plugin-add helm
               asdf plugin-add redis
               asdf plugin-add yarn
               asdf plugin-add python
