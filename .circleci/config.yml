@@ -63,7 +63,6 @@ jobs:
             name: Run pre-commit
             command: |
               source ~/.asdf/asdf.sh 
-              asdf plugin-add postgres
               asdf global postgres 11.4
               asdf reshim 
               gem install bundler:2.1.4
@@ -120,10 +119,11 @@ workflows:
           requires:
             - tools
             - aws-ecr/build-and-push-image
-          # filters:
-          #   branches:
-          #     only:
-          #       - develop
+            - lint
+          filters:
+            branches:
+              only:
+                - develop
       - tools
       - lint:
           requires:
@@ -138,12 +138,12 @@ workflows:
           repo: $AWS_ECR_REPO_NAME
           skip-when-tags-exist: true
           tag: $(echo $CIRCLE_SHA1 | cut -c -7)
-          # requires:
-          #   - lint
-          # filters:
-          #   branches:
-          #     only:
-          #       - develop
+          requires:
+            - lint
+          filters:
+            branches:
+              only:
+                - develop
       # - push-heroku:
       #     requires:
       #       - lint
