@@ -124,9 +124,9 @@ workflows:
           #     only:
           #       - develop
       - tools
-      - lint:
-          requires:
-            - tools
+      # - lint:
+      #     requires:
+      #       - tools
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL
           aws-access-key-id: ACCESS_KEY_ID
