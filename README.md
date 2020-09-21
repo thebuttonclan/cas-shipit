@@ -28,22 +28,19 @@ Before triggering the first build, you need to run `make create_secrets`, as the
   - Run `RAILS_MASTER_KEY=<master key> docker-compose up`
   - If this is your first time starting the server, initialize the database with `docker-compose run app bundle exec rake db:create`
 
-Node needs the following permissions for ECR
+# Deploying
 
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:BatchGetImage",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:GetAuthorizationToken"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-```
+## Circleci
+
+Setup a user on AWS with permissions to push and pull to ECS, and give them permissions on the eks cluster. 
+Use their credentials to setup the following environment variables in circleci:
+
+  - ACCESS_KEY_ID:          users access key id
+  - AWS_CLUSTER_NAME        name of the eks cluster to install shipit on
+  - AWS_ECR_ACCOUNT_URL     account url without repo name, e.g 555555555555.dkr.ecr.<cluster-region>.amazonaws.com
+  - AWS_ECR_REPO_NAME       name of ecr repo to contain images
+  - AWS_REGION              region eks cluster is in
+  - SECRET_ACCESS_KEY       user secret access key
+
+Merging into the deploy branch will trigger remaking the docker image, saving it in ecr with a new tag (using the git commit hash),
+and redeploy it via helm into the eks cluster.
