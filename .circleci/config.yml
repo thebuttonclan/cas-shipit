@@ -30,6 +30,11 @@ jobs:
             name: Install asdf tools
             command: |
               asdf plugin-add postgres
+              asdf plugin-add ruby
+              asdf plugin-add helm
+              asdf plugin-add redis
+              asdf plugin-add yarn
+              asdf plugin-add python
               asdf install
               asdf reshim
               pip install pre-commit
