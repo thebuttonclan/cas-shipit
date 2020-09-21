@@ -63,8 +63,8 @@ jobs:
             name: Run pre-commit
             command: |
               source ~/.asdf/asdf.sh 
-              asdf global postgres 11.4
               asdf reshim 
+              asdf global postgres 11.4
               gem install bundler:2.1.4
               bundle install
               pre-commit
@@ -125,9 +125,9 @@ workflows:
               only:
                 - develop
       - tools
-      # - lint:
-      #     requires:
-      #       - tools
+      - lint:
+          requires:
+            - tools
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL
           aws-access-key-id: ACCESS_KEY_ID
