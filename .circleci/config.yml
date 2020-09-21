@@ -33,7 +33,6 @@ jobs:
               asdf plugin-add ruby
               asdf plugin-add redis
               asdf plugin-add yarn
-              asdf plugin-add python
               asdf install
               asdf reshim
               pip install pre-commit
