@@ -137,8 +137,8 @@ workflows:
           repo: shipit-images
           skip-when-tags-exist: true
           tag: $(echo $CIRCLE_SHA1 | cut -c -7)
-          requires:
-            - lint
+          # requires:
+          #   - lint
           # filters:
           #   branches:
           #     only:
