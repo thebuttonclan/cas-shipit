@@ -64,6 +64,7 @@ jobs:
             command: |
               source ~/.asdf/asdf.sh 
               asdf reshim 
+              asdf plugin-add postgres
               asdf global postgres 11.4
               gem install bundler:2.1.4
               bundle install
