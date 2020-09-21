@@ -54,7 +54,7 @@ jobs:
             name: Install dependencies
             command: |
               sudo apt-get update
-              sudo apt-get -y install zlib1g-dev libpq-dev
+              sudo apt-get -y install zlib1g-dev libpq-dev lib32readline7
         - restore_cache:
             name: Restore gems
             keys:
