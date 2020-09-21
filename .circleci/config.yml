@@ -29,6 +29,10 @@ jobs:
         - run:
             name: Install asdf tools
             command: |
+              asdf plugin-add ruby
+              asdf plugin-add postgres
+              asdf plugin-add redis
+              asdf plugin-add yarn
               asdf list
               asdf install
               asdf list
@@ -66,8 +70,6 @@ jobs:
             command: |
               source ~/.asdf/asdf.sh 
               asdf reshim 
-              asdf plugin-add postgres
-              asdf install postgres 11.4
               asdf global postgres 11.4
               gem install bundler:2.1.4
               bundle install
