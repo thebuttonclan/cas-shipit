@@ -2,7 +2,6 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@0.1.2 
   aws-ecr: circleci/aws-ecr@6.12.2
-  aws-eks: circleci/aws-eks@1.0.0
   aws-cli: circleci/aws-cli@1.3.0
   kube-orb: circleci/kubernetes@0.11.1
 
@@ -100,9 +99,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - aws-cli/setup:
-          aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
+          aws-access-key-id: ACCESS_KEY_ID
           aws-region: AWS_REGION
-          aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+          aws-secret-access-key: SECRET_ACCESS_KEY
       - kube-orb/install-kubectl
       - run:
           name: Update helm chart
@@ -110,7 +109,7 @@ jobs:
             source ~/.asdf/asdf.sh
             asdf reshim
             aws eks --region $AWS_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
-            helm upgrade --install shipit ./shipit-helm -n test --set master_key=$RAILS_MASTER_KEY --set image_tag=$(echo $CIRCLE_SHA1 | cut -c -7)
+            helm upgrade --install shipit ./shipit-helm -n test --set master_key=$RAILS_MASTER_KEY --set image_tag=$(echo $CIRCLE_SHA1 | cut -c -7) --set repoUrl=$AWS_ECR_ACCOUNT_URL
       
 workflows:
   version: 2
@@ -120,26 +119,30 @@ workflows:
           requires:
             - tools
             - aws-ecr/build-and-push-image
+          # filters:
+          #   branches:
+          #     only:
+          #       - develop
       - tools
-      # - lint:
-      #     requires:
-      #       - tools
+      - lint:
+          requires:
+            - tools
       - aws-ecr/build-and-push-image:
-          account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
-          aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-          aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-          # context: myContext
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: ACCESS_KEY_ID
+          aws-secret-access-key: SECRET_ACCESS_KEY
           create-repo: false
-          # dockerfile: myDockerfile
           no-output-timeout: 20m
-          # path: pathToMyDockerfile
-          # profile-name: myProfileName
-          region: AWS_REGION_ENV_VAR_NAME
+          region: AWS_REGION
           repo: shipit-images
           skip-when-tags-exist: true
           tag: $(echo $CIRCLE_SHA1 | cut -c -7)
-          # requires:
-          #   - lint
+          requires:
+            - lint
+          # filters:
+          #   branches:
+          #     only:
+          #       - develop
       # - push-heroku:
       #     requires:
       #       - lint
