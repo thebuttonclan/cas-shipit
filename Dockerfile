@@ -22,16 +22,13 @@ WORKDIR /usr/src/shipit
 
 COPY . .
 
+RUN mv ./config/credentials-prod.yml.enc ./config/credentials.yml.enc
+
 RUN gem install bundler:2.1.4
 RUN bundle install
 
 RUN apk del .build-deps
 
-COPY entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
-
 EXPOSE 3000
 
-# CMD ["rails", "server", "-b", "0.0.0.0"]
 CMD rails server -b 0.0.0.0 && bundle exec sidekiq -C config/sidekiq.yml
