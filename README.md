@@ -44,3 +44,5 @@ Use their credentials to setup the following environment variables in circleci:
 
 Merging into the deploy branch will trigger remaking the docker image, saving it in ecr with a new tag (using the git commit hash),
 and redeploy it via helm into the eks cluster.
+
+The first time running the app, run `bundle exec rake db:create` and `bundle exec rake db:migrate` on the application pod to initialize the db.
