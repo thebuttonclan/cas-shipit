@@ -109,7 +109,7 @@ jobs:
             source ~/.asdf/asdf.sh
             asdf reshim
             aws eks --region $AWS_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
-            helm upgrade --install shipit ./shipit-helm -n test --set master_key=$RAILS_MASTER_KEY --set image_tag=$(echo $CIRCLE_SHA1 | cut -c -7) --set repoUrl=$AWS_ECR_ACCOUNT_URL
+            helm upgrade --install shipit ./shipit-helm -n test --set master_key=$RAILS_MASTER_KEY --set image_tag=$(echo $CIRCLE_SHA1 | cut -c -7) --set repoUrl="${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}"
       
 workflows:
   version: 2
@@ -134,7 +134,7 @@ workflows:
           create-repo: false
           no-output-timeout: 20m
           region: AWS_REGION
-          repo: shipit-images
+          repo: $AWS_ECR_REPO_NAME
           skip-when-tags-exist: true
           tag: $(echo $CIRCLE_SHA1 | cut -c -7)
           # requires:
